@@ -413,12 +413,12 @@ module.exports = function(app) {
 	// SVG size
 	if(app.state.mobile) { 
 		var headerHeight = 102
-		var listWidth = 0 
+		var listWidth = 2 
 	} else { 
 		var headerHeight = 73 
-		var listWidth = 300
+		var listWidth = 320
 	}
-	var svgWidth = app.state.screen[0] - listWidth - 20
+	var svgWidth = app.state.screen[0] - listWidth
 	var svgHeight = app.state.screen[1] - headerHeight - 5
 
 	// Scales
@@ -490,7 +490,7 @@ module.exports = function(app, svg, icon, data) {
 	var bike = leg.c('g').a({
 		id: 'legend-bike',
 		fill: app.color.lightBlue,
-		transform: 'translate(-100,0)'
+		transform: 'translate(-80,0)'
 	})
 	bike.c('path').a({ 
 		d: icon.bike,
