@@ -1,0 +1,17 @@
+{
+  "name": "traffic_census_zh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "watchify main.js -o public/script.js",
+    "build": "minify public/script.js"
+  },
+  "author": "idris-maps",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "d3-scale": "^1.0.4",
+    "xml-string": "^1.0.0"
+  }
+}
