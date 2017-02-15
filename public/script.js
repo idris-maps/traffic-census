@@ -555,8 +555,11 @@ module.exports = function(app, page) {
 	header.c('h1').d('Traffic census')
 	if(app.state.mobile) {
 		var btns = header.c('div').a({ id: 'header-btns' })
-		btns.c('button').a({ id: 'header-btn-list' }).d('List')
-		btns.c('button').a({ id: 'header-btn-graph' }).d('Graph')	
+		var clList = 'current'
+		var clGraph = ''
+		if(app.state.mobileView === 'graph') { var clList = ''; var clGraph = 'current' }
+		btns.c('button').a({ id: 'header-btn-list', 'class': clList }).d('List')
+		btns.c('button').a({ id: 'header-btn-graph', 'class': clGraph }).d('Graph')	
 	}
 }
 
@@ -586,8 +589,11 @@ function head(table, icon) {
 		[icon.bike, 'CYCLISTS'],
 		[icon.walk, 'PEDESTRIANS']
 	]
-	data.forEach(function(d) {
-		var td = tr.c('div').a({ 'class': 'table-cell table-cell-head' })
+	data.forEach(function(d, i) {
+		var td = tr.c('div').a({ 
+			'class': 'table-cell table-cell-head',
+			id: 'table-cell-head-' + i
+		})
 		var svgSpan = td.c('span').a({ 'class': 'table-head-icon' })
 		var svg = svgSpan.c('svg').a({ width: 12, height: 12 })
 		svg.c('path').a({ transform: 'translate(6,6)', d: d[0] })
