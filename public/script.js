@@ -312,12 +312,9 @@ var header = require('./views/header')
 
 module.exports = function(app) {
 	var page = xml.create('div')
-	page.a({id: 'page'})
-	
 	header(app, page)
 
-	console.log(app, page.outer())
-
+	document.getElementById('root').innerHTML = page.outer()
 }
 
 },{"./views/header":4,"xml-string":6}],4:[function(require,module,exports){
@@ -337,11 +334,11 @@ var data = require('./data/months.json')
 var render = require('./lib/render')
 
 var evt = new EventEmitter()
-var app = new App(evt, render)
+var app = new App(evt, data, render)
 window.onload = function() { app.evt.emit('resize') }
 window.onresize = function() { app.evt.emit('resize') }
 
-function App(evt, render) {
+function App(evt, data, render) {
 	var o = this
 	o.evt = evt
 	o.state = {
@@ -349,6 +346,7 @@ function App(evt, render) {
 		mobile: false,
 		mobileView: 'list'
 	}
+	o.data = data
 	o.colors = {
 		darkBlue: '#003b5c',
 		lightBlue: '#3f7397',
