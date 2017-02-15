@@ -303,21 +303,34 @@ function isUndefined(arg) {
 }
 
 },{}],2:[function(require,module,exports){
-module.exports=[{"month_id":12,"month_name":"December","walk":186,"bike":6453},{"month_id":11,"month_name":"November","walk":199,"bike":6503},{"month_id":10,"month_name":"October","walk":321,"bike":7524},{"month_id":9,"month_name":"September","walk":752,"bike":8626},{"month_id":8,"month_name":"August","walk":1614,"bike":10348},{"month_id":7,"month_name":"July","walk":1863,"bike":9335},{"month_id":6,"month_name":"June","walk":1080,"bike":8321},{"month_id":5,"month_name":"May","walk":1063,"bike":10029},{"month_id":4,"month_name":"April","walk":636,"bike":8515},{"month_id":3,"month_name":"March","walk":353,"bike":7562},{"month_id":2,"month_name":"February","walk":296,"bike":5936},{"month_id":1,"month_name":"January","walk":170,"bike":7446}]
+module.exports={
+	"calendar": "m 4.5148419,-4.5622183 -1,0 c 0,0 0,-1 -1,-1 -1,0 -1,1 -1,1 l -2.00000003,0 c 0,0 0,-1 -0.99999997,-1 -1,0 -1,1 -1,1 l -1,0 c -0.5,0 -1,0.5 -1,1 l 0,7 c 0,0.5 0.5,1 1,1 l 8,0 c 0.5,0 1,-0.5 1,-1 l 0,-7 c 0,-0.5 -0.5,-1 -1,-1 z m 0,8 -8,0 0,-5 8,0 0,5 z",
+	"bike": "M 4.425,1.4392713 3,-4.9357287 c -0.075,-0.375 -0.375,-0.6 -0.75,-0.6 l -3,0 0,1.5 2.4,0 0.525,2.25 -5.175,0 c -0.45,0 -0.75,0.3 -0.75,0.75 l 0,1.57499998 c -1.275,0.3 -2.25,1.50000002 -2.25,2.92500002 0,1.65 1.35,3 3,3 1.65,0 3,-1.35 3,-3 0,-1.425 -0.975,-2.55000002 -2.25,-2.92500002 l 0,-0.825 4.725,0 0.375,1.57500002 c -1.2,0.225 -2.1,1.275 -2.1,2.55 0,1.425 1.2,2.625 2.625,2.625 1.425,0 2.625,-1.2 2.625,-2.625 0,-1.05 -0.675,-2.025 -1.575,-2.4 z m -5.925,2.025 c 0,0.825 -0.675,1.5 -1.5,1.5 -0.825,0 -1.5,-0.675 -1.5,-1.5 0,-0.825 0.675,-1.5 1.5,-1.5 0.825,0 1.5,0.675 1.5,1.5 z m 4.875,1.5 c -0.6,0 -1.125,-0.525 -1.125,-1.125 0,-0.6 0.525,-1.125 1.125,-1.125 0.6,0 1.125,0.525 1.125,1.125 0,0.6 -0.525,1.125 -1.125,1.125 z m -8.625,-9 3,0 0,1.5 -3,0 0,-1.5 z",
+	"walk": "m -4.6823126,2.6576438 c 0,0 -0.7896778,-2.03525582 -0.7896778,-3.8044866 0,-1.7692307 1.0214286,-2.9230769 2.2785714,-2.9230769 1.257143,0 2.27857159,1.1538462 2.27857159,2.9230769 0,1.38461548 -0.62460799,1.57371738 -0.62460799,3.8044866 l -3.1428572,0 z m 1.7246079,3.733975 c -1.1785714,0 -2.1214285,-1 -1.8857142,-2.153846 l 0.1571428,-0.615385 3.1428572,0 c 0.3928572,1.615385 -0.078571,2.769231 -1.4142858,2.769231 z m 7.4099905,-5.0599799 -3.1428571,0 c 0,-2.23076926 -0.33856196,-2.6323279 -0.33856196,-4.0169432 0,-1.7692307 1.02142856,-2.9230769 2.27857146,-2.9230769 1.2571428,0 2.2785714,1.1538462 2.2785714,2.9230769 0,1.76923074 -1.0757238,4.0169432 -1.0757238,4.0169432 z M 2.6002517,5.3007098 c -1.2701697,0 -1.71846476,-1.363636 -1.3448855,-3.2727274 l 2.9886344,0 0.1494317,0.7272724 c 0.2241473,1.363637 -0.6724427,2.545455 -1.7931806,2.545455 z"
+}
 
 },{}],3:[function(require,module,exports){
+module.exports=[{"month_id":12,"month_name":"December","walk":186,"bike":6453},{"month_id":11,"month_name":"November","walk":199,"bike":6503},{"month_id":10,"month_name":"October","walk":321,"bike":7524},{"month_id":9,"month_name":"September","walk":752,"bike":8626},{"month_id":8,"month_name":"August","walk":1614,"bike":10348},{"month_id":7,"month_name":"July","walk":1863,"bike":9335},{"month_id":6,"month_name":"June","walk":1080,"bike":8321},{"month_id":5,"month_name":"May","walk":1063,"bike":10029},{"month_id":4,"month_name":"April","walk":636,"bike":8515},{"month_id":3,"month_name":"March","walk":353,"bike":7562},{"month_id":2,"month_name":"February","walk":296,"bike":5936},{"month_id":1,"month_name":"January","walk":170,"bike":7446}]
+
+},{}],4:[function(require,module,exports){
 var xml = require('xml-string')
 var header = require('./views/header')
+var table = require('./views/table')
 
 
 module.exports = function(app) {
 	var page = xml.create('div')
 	header(app, page)
+	if(!app.state.mobile) {
+		table(app, page)
+	} else if(app.state.mobileView === 'list') {
+		table(app, page)
+	}
 
 	document.getElementById('root').innerHTML = page.outer()
 }
 
-},{"./views/header":4,"xml-string":6}],4:[function(require,module,exports){
+},{"./views/header":5,"./views/table":6,"xml-string":8}],5:[function(require,module,exports){
 module.exports = function(app, page) {
 	var header = page.c('div').a({ id: 'header' })
 	header.c('h1').d('Traffic census')
@@ -328,7 +341,42 @@ module.exports = function(app, page) {
 	}
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+var icon = require('../../data/icons.json')
+
+module.exports = function(app, page) {
+	var table = page.c('div').a({ id: 'table' })
+	head(table, icon)
+	body(table, app.data)
+}
+
+function body(table, data) {
+	data.forEach(function(d) {
+		var tr = table.c('div').a({ 'class': 'table-line' })
+		tr.c('div').a({ 'class': 'table-cell table-cell-0' }).d(d.month_name)
+		tr.c('div').a({ 'class': 'table-cell table-cell-1' }).d(d.bike)
+		tr.c('div').a({ 'class': 'table-cell table-cell-2' }).d(d.walk)
+	})
+
+}
+
+function head(table, icon) {
+	var tr = table.c('div').a({ id: 'table-head' })
+	var data = [
+		[icon.calendar, 'DATE'],
+		[icon.bike, 'CYCLISTS'],
+		[icon.walk, 'PEDESTRIANS']
+	]
+	data.forEach(function(d) {
+		var td = tr.c('div').a({ 'class': 'table-cell table-cell-head' })
+		var svgSpan = td.c('span').a({ 'class': 'table-head-icon' })
+		var svg = svgSpan.c('svg').a({ width: 12, height: 12 })
+		svg.c('path').a({ transform: 'translate(6,6)', d: d[0] })
+		td.c('span').a({ 'class': 'table-head-title' }).d(d[1])
+	})
+}
+
+},{"../../data/icons.json":2}],7:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var data = require('./data/months.json')
 var render = require('./lib/render')
@@ -372,7 +420,7 @@ function App(evt, data, render) {
 	})
 }
 
-},{"./data/months.json":2,"./lib/render":3,"events":1}],6:[function(require,module,exports){
+},{"./data/months.json":3,"./lib/render":4,"events":1}],8:[function(require,module,exports){
 var El = require('./lib/El')
 
 exports.create = function(el) {
@@ -380,7 +428,7 @@ exports.create = function(el) {
 	return element
 }
 
-},{"./lib/El":7}],7:[function(require,module,exports){
+},{"./lib/El":9}],9:[function(require,module,exports){
 module.exports = function(el) {
 	var element = new El(el)
 	return element
@@ -443,4 +491,4 @@ function attrString(o) {
 	return str
 }
 
-},{}]},{},[5]);
+},{}]},{},[7]);
