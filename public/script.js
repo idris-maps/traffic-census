@@ -337,9 +337,11 @@ module.exports = function(app) {
 	document.getElementById('root').innerHTML = page.inner()
 }
 
-},{"./views/graph":5,"./views/header":6,"./views/table":7,"xml-string":17}],5:[function(require,module,exports){
-var d3 = require('d3-scale')
+},{"./views/graph":5,"./views/header":9,"./views/table":10,"xml-string":20}],5:[function(require,module,exports){
 var icon = require('../../data/icons.json')
+var getData = require('./graph/get-data')
+var icons = require('./graph/icons')
+var points = require('./graph/points')
 
 module.exports = function(app, page) {
 	var div = page.c('div').a({ id: 'graph' })
@@ -349,10 +351,18 @@ module.exports = function(app, page) {
 		height: data.svg.height
 	})
 	icons(app, svg, icon, data)
-	console.log(data)
+	points(svg, data.xy.bike, 'bike', app.color.lightBlue)
+	points(svg, data.xy.walk, 'walk', app.color.red)
 }
 
-function getData(app) {
+
+
+
+
+},{"../../data/icons.json":2,"./graph/get-data":6,"./graph/icons":7,"./graph/points":8}],6:[function(require,module,exports){
+var d3 = require('d3-scale')
+
+module.exports = function(app) {
 	// SVG size
 	if(app.state.mobile) { var headerHeight = 102 } else { var headerHeight = 73 }
 	var svgWidth = app.state.screen[0] - 320
@@ -380,11 +390,13 @@ function getData(app) {
 
 	return {
 		svg: { width: svgWidth, height: svgHeight },
-		xy: { bike: bikeXY, walk: walkXY }
+		xy: { bike: bikeXY, walk: walkXY },
+		scale: { x: x, y: y }
 	}
 }
 
-function icons(app, svg, icon, data) {
+},{"d3-scale":17}],7:[function(require,module,exports){
+module.exports = function(app, svg, icon, data) {
 	var leg = svg.c('g').a({ 
 		id: 'legend',
 		transform: 'translate(' + data.svg.width/2 + ',50)',
@@ -418,7 +430,23 @@ function icons(app, svg, icon, data) {
 	}).d('Pedestrians')
 }
 
-},{"../../data/icons.json":2,"d3-scale":14}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+module.exports = function(svg, coords, cl, color) {
+	var r = 3
+	var g = svg.c('g').a({ 
+		id: 'points-' + cl,
+		fill: color
+	})
+	coords.forEach(function(d) {
+		g.c('circle').a({
+			cx: d[0],
+			cy: d[1],
+			r: r
+		})
+	})
+}
+
+},{}],9:[function(require,module,exports){
 module.exports = function(app, page) {
 	var header = page.c('div').a({ id: 'header' })
 	header.c('h1').d('Traffic census')
@@ -429,7 +457,7 @@ module.exports = function(app, page) {
 	}
 }
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var icon = require('../../data/icons.json')
 
 module.exports = function(app, page) {
@@ -464,7 +492,7 @@ function head(table, icon) {
 	})
 }
 
-},{"../../data/icons.json":2}],8:[function(require,module,exports){
+},{"../../data/icons.json":2}],11:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var data = require('./data/months.json')
 var render = require('./lib/render')
@@ -508,7 +536,7 @@ function App(evt, data, render) {
 	})
 }
 
-},{"./data/months.json":3,"./lib/render":4,"events":1}],9:[function(require,module,exports){
+},{"./data/months.json":3,"./lib/render":4,"events":1}],12:[function(require,module,exports){
 // https://d3js.org/d3-array/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -975,7 +1003,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 // https://d3js.org/d3-collection/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -1194,7 +1222,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // https://d3js.org/d3-color/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -1719,7 +1747,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],12:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // https://d3js.org/d3-format/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -2049,7 +2077,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
   Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 // https://d3js.org/d3-interpolate/ Version 1.1.3. Copyright 2017 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-color')) :
@@ -2596,7 +2624,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-color":11}],14:[function(require,module,exports){
+},{"d3-color":14}],17:[function(require,module,exports){
 // https://d3js.org/d3-scale/ Version 1.0.4. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-array'), require('d3-collection'), require('d3-interpolate'), require('d3-format'), require('d3-time'), require('d3-time-format'), require('d3-color')) :
@@ -3501,7 +3529,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-array":9,"d3-collection":10,"d3-color":11,"d3-format":12,"d3-interpolate":13,"d3-time":16,"d3-time-format":15}],15:[function(require,module,exports){
+},{"d3-array":12,"d3-collection":13,"d3-color":14,"d3-format":15,"d3-interpolate":16,"d3-time":19,"d3-time-format":18}],18:[function(require,module,exports){
 // https://d3js.org/d3-time-format/ Version 2.0.3. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-time')) :
@@ -4091,7 +4119,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-time":16}],16:[function(require,module,exports){
+},{"d3-time":19}],19:[function(require,module,exports){
 // https://d3js.org/d3-time/ Version 1.0.4. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -4471,7 +4499,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var El = require('./lib/El')
 
 exports.create = function(el) {
@@ -4479,7 +4507,7 @@ exports.create = function(el) {
 	return element
 }
 
-},{"./lib/El":18}],18:[function(require,module,exports){
+},{"./lib/El":21}],21:[function(require,module,exports){
 module.exports = function(el) {
 	var element = new El(el)
 	return element
@@ -4542,4 +4570,4 @@ function attrString(o) {
 	return str
 }
 
-},{}]},{},[8]);
+},{}]},{},[11]);
