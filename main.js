@@ -16,7 +16,7 @@ function App(evt, data, render) {
 		mobileView: 'list'
 	}
 	o.data = data
-	o.colors = {
+	o.color = {
 		darkBlue: '#003b5c',
 		lightBlue: '#3f7397',
 		red: '#ff5555',
