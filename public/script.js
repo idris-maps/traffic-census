@@ -313,16 +313,23 @@ module.exports={
 module.exports=[{"month_id":12,"month_name":"December","walk":186,"bike":6453},{"month_id":11,"month_name":"November","walk":199,"bike":6503},{"month_id":10,"month_name":"October","walk":321,"bike":7524},{"month_id":9,"month_name":"September","walk":752,"bike":8626},{"month_id":8,"month_name":"August","walk":1614,"bike":10348},{"month_id":7,"month_name":"July","walk":1863,"bike":9335},{"month_id":6,"month_name":"June","walk":1080,"bike":8321},{"month_id":5,"month_name":"May","walk":1063,"bike":10029},{"month_id":4,"month_name":"April","walk":636,"bike":8515},{"month_id":3,"month_name":"March","walk":353,"bike":7562},{"month_id":2,"month_name":"February","walk":296,"bike":5936},{"month_id":1,"month_name":"January","walk":170,"bike":7446}]
 
 },{}],4:[function(require,module,exports){
+module.exports = function(app) {
+	var list = document.getElementById('header-btn-list')
+	var graph = document.getElementById('header-btn-graph')
+	list.onclick = function() { app.evt.emit('toggle-mobile-view', 'list') }
+	graph.onclick = function() { app.evt.emit('toggle-mobile-view', 'graph') }
+}
+
+},{}],5:[function(require,module,exports){
 var xml = require('xml-string')
 var header = require('./views/header')
 var table = require('./views/table')
 var graph = require('./views/graph')
+var ctrl = require('./ctrl')
 
 module.exports = function(app) {
 	var page = xml.create('div')
 	header(app, page)
-
-
 
 	if(!app.state.mobile) {
 		var content = page.c('div').a({ id: 'content' })
@@ -335,9 +342,12 @@ module.exports = function(app) {
 	}
 
 	document.getElementById('root').innerHTML = page.inner()
+	if(app.state.mobile) {
+		ctrl(app)
+	}
 }
 
-},{"./views/graph":5,"./views/header":12,"./views/table":13,"xml-string":23}],5:[function(require,module,exports){
+},{"./ctrl":4,"./views/graph":6,"./views/header":13,"./views/table":14,"xml-string":24}],6:[function(require,module,exports){
 var icon = require('../../data/icons.json')
 var getData = require('./graph/get-data')
 var icons = require('./graph/icons')
@@ -366,7 +376,7 @@ module.exports = function(app, page) {
 
 
 
-},{"../../data/icons.json":2,"./graph/axis":6,"./graph/get-data":7,"./graph/grid":8,"./graph/icons":9,"./graph/lines":10,"./graph/points":11}],6:[function(require,module,exports){
+},{"../../data/icons.json":2,"./graph/axis":7,"./graph/get-data":8,"./graph/grid":9,"./graph/icons":10,"./graph/lines":11,"./graph/points":12}],7:[function(require,module,exports){
 module.exports = function(svg, app, svgSize, scale, color) {
 	var g = svg.c('g').a({ 
 		id: 'x-axis',
@@ -396,7 +406,7 @@ function text(g, x, y, n, color) {
 	}).d(n)
 }
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var d3 = require('d3-scale')
 
 module.exports = function(app) {
@@ -438,7 +448,7 @@ module.exports = function(app) {
 	}
 }
 
-},{"d3-scale":20}],8:[function(require,module,exports){
+},{"d3-scale":21}],9:[function(require,module,exports){
 module.exports = function(svg, svgWidth, yScale, color) {
 	var data = [3000, 6000, 9000, 12000]
 	var gLines = svg.c('g').a({ 
@@ -470,7 +480,7 @@ function toText(n) {
 	return t + '\'000'
 }
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = function(app, svg, icon, data) {
 	var leg = svg.c('g').a({ 
 		id: 'legend',
@@ -505,7 +515,7 @@ module.exports = function(app, svg, icon, data) {
 	}).d('Pedestrians')
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = function(svg, coords, cl, color) {
 	var g = svg.c('g').a({ 
 		id: 'lines-' + cl,
@@ -523,7 +533,7 @@ module.exports = function(svg, coords, cl, color) {
 	})
 }
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports = function(svg, coords, cl, color) {
 	var r = 3
 	var g = svg.c('g').a({ 
@@ -539,7 +549,7 @@ module.exports = function(svg, coords, cl, color) {
 	})
 }
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 module.exports = function(app, page) {
 	var header = page.c('div').a({ id: 'header' })
 	header.c('h1').d('Traffic census')
@@ -550,7 +560,7 @@ module.exports = function(app, page) {
 	}
 }
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var icon = require('../../data/icons.json')
 
 module.exports = function(app, page) {
@@ -585,7 +595,7 @@ function head(table, icon) {
 	})
 }
 
-},{"../../data/icons.json":2}],14:[function(require,module,exports){
+},{"../../data/icons.json":2}],15:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var data = require('./data/months.json')
 var render = require('./lib/render')
@@ -621,15 +631,16 @@ function App(evt, data, render) {
 		else { o.state.mobile = false }
 		o.render()
 	})
-	o.evt.on('toggle-mobile-view', function() {
+	o.evt.on('toggle-mobile-view', function(view) {
 		console.log('EVENT toggle-mobile-view')
-		if(o.state.mobileView === 'list') { o.state.mobileView = 'graph' }
-		else { o.state.mobileView = 'list' }
-		o.render()
+		if(o.state.mobileView !== view) {
+			o.state.mobileView = view
+			o.render()
+		}
 	})
 }
 
-},{"./data/months.json":3,"./lib/render":4,"events":1}],15:[function(require,module,exports){
+},{"./data/months.json":3,"./lib/render":5,"events":1}],16:[function(require,module,exports){
 // https://d3js.org/d3-array/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -1096,7 +1107,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // https://d3js.org/d3-collection/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -1315,7 +1326,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 // https://d3js.org/d3-color/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -1840,7 +1851,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 // https://d3js.org/d3-format/ Version 1.0.2. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -2170,7 +2181,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
   Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // https://d3js.org/d3-interpolate/ Version 1.1.3. Copyright 2017 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-color')) :
@@ -2717,7 +2728,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-color":17}],20:[function(require,module,exports){
+},{"d3-color":18}],21:[function(require,module,exports){
 // https://d3js.org/d3-scale/ Version 1.0.4. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-array'), require('d3-collection'), require('d3-interpolate'), require('d3-format'), require('d3-time'), require('d3-time-format'), require('d3-color')) :
@@ -3622,7 +3633,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-array":15,"d3-collection":16,"d3-color":17,"d3-format":18,"d3-interpolate":19,"d3-time":22,"d3-time-format":21}],21:[function(require,module,exports){
+},{"d3-array":16,"d3-collection":17,"d3-color":18,"d3-format":19,"d3-interpolate":20,"d3-time":23,"d3-time-format":22}],22:[function(require,module,exports){
 // https://d3js.org/d3-time-format/ Version 2.0.3. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-time')) :
@@ -4212,7 +4223,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{"d3-time":22}],22:[function(require,module,exports){
+},{"d3-time":23}],23:[function(require,module,exports){
 // https://d3js.org/d3-time/ Version 1.0.4. Copyright 2016 Mike Bostock.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -4592,7 +4603,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var El = require('./lib/El')
 
 exports.create = function(el) {
@@ -4600,7 +4611,7 @@ exports.create = function(el) {
 	return element
 }
 
-},{"./lib/El":24}],24:[function(require,module,exports){
+},{"./lib/El":25}],25:[function(require,module,exports){
 module.exports = function(el) {
 	var element = new El(el)
 	return element
@@ -4663,4 +4674,4 @@ function attrString(o) {
 	return str
 }
 
-},{}]},{},[14]);
+},{}]},{},[15]);

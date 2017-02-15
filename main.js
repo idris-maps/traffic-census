@@ -33,10 +33,11 @@ function App(evt, data, render) {
 		else { o.state.mobile = false }
 		o.render()
 	})
-	o.evt.on('toggle-mobile-view', function() {
+	o.evt.on('toggle-mobile-view', function(view) {
 		console.log('EVENT toggle-mobile-view')
-		if(o.state.mobileView === 'list') { o.state.mobileView = 'graph' }
-		else { o.state.mobileView = 'list' }
-		o.render()
+		if(o.state.mobileView !== view) {
+			o.state.mobileView = view
+			o.render()
+		}
 	})
 }
